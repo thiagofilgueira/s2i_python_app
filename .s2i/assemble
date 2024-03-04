@@ -1,0 +1,28 @@
+#!/bin/bash
+echo "Antes do assemble"
+
+ls -lh /tmp/src/
+
+cd /tmp/src/
+
+echo '------> INSTALANDO PIPENV'
+
+pip install --upgrade pip && pip install pipenv uvicorn
+
+echo '------> INSTALANDO DEPENDENCIAS'
+
+pipenv install --system --deploy
+
+echo '------> VOLTANDO PARA A HOME'
+
+cd -
+
+echo '------> EXECUTANDO ASSEMBLE'
+/usr/libexec/s2i/assemble
+rc=$?
+if [ $rc -eq 0 ]; then
+ echo "Sucesso no assemble"
+else
+ echo "Falha no assemble"
+fi
+exit $rc
